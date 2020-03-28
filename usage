@@ -19,6 +19,31 @@ for /L %i in (1,0,2) do @dir /b /a | find /c /v "" & ping -n 6 127.0.0.1>nul
 while :; do ls | wc -l;sleep 5; done
 watch -n 5 "ls | wc -l"
 
+#listing files and their sizes on Windows
+for /r c:\ %i in (*) do @echo %~zi, %i # see https://ss64.com/nt/for_r.html
+for /r c:\ %i in (*) do @echo %~zi, %i >> filename.csv
+
+#listing files and thier sizes on Linux
+find /-type f -exec wc -c {} \;
+find /-type f -exec wc -c {} \; |sort -n
+find /-type f -exec wc -c {} \; |sort -nr|head -100
+
+#Reverse DNS records in Linux
+sed 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\).in-addr.arpa domain name pointer\(.*\)\./\4.\3.\2.\1\5/' lookups.txt
+
+#Reverse DNS records in Windows
+FOR /F "tokens=1-5" %a in (lookups.txt) do @(@FOR /F "tokens=1-4 delims=." %i in ("%a") do @echo %l.%k.%j.%i %e)
+
+#subnet ping sweep on Windows
+FOR /L %i in (1,1,255) do @ping -n 1 -w 100 10.10.10.%i | find "Reply"
+
+#subnet ping sweep on Linux
+for i in `seq 1 255`; do ping -c 1 10.10.10.$i | tr \\n ' ' | awk '/1 received/ {print $2}'; done
+
+#reboot at specific time
+sleep 30; shutdown -r now
+shutdown -r +1   #shutdown in 1 minute
+shutdown -r 14:30    #at 14:30
 
 
 
