@@ -1,0 +1,24 @@
+#convert DOS to UNIX
+tr '\r' '\n' < file.txt > newfile.txt
+
+#show config of firewall on Windows
+newsh firewall show portopening
+netsh firewall show allowedprogram
+netsh firewall show config
+
+#show config of firewall on Linux
+iptables -t nat -nL
+iptables -t mangle -nL
+iptables -t filter -nL
+iptalbes -t raw -nL
+
+#file count in a directory on Windows
+for /L %i in (1,0,2) do @dir /b /a | find /c /v "" & ping -n 6 127.0.0.1>nul
+
+#file count in a directory on Linux
+while :; do ls | wc -l;sleep 5; done
+watch -n 5 "ls | wc -l"
+
+
+
+
