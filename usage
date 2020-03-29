@@ -1,3 +1,6 @@
+#prel regex theory : https://qiita.com/konoui/items/2b4e76048a4518d7396b
+#https://abicky.net/2010/05/30/135112/
+
 #convert DOS to UNIX
 tr '\r' '\n' < file.txt > newfile.txt
 
@@ -45,5 +48,21 @@ sleep 30; shutdown -r now
 shutdown -r +1   #shutdown in 1 minute
 shutdown -r 14:30    #at 14:30
 
+#head and tail on Windows
+find /v /n "" <file> | findstr /b /L [<n>] > temp.txt &
+for /F "delims=[] tokens=2" %i in (temp.txt) do @echo %i & del temp.txt
 
+#find filename containing searching string on Linux
+find /usr/include -type f | xargs grep -l sockaddr_in >/dev/null   # -exec is slooooooow
+
+#find filename containing searching string on Windows
+findstr /s /d:c:\windows /m stringyouwant *     # /m tells windows to show only file names.
+
+#file sort by creation time on Linux
+ls -li /etc | sort -n
+
+#file sort by creation time on Windows
+dir /tc
+
+#
 

@@ -1,0 +1,1 @@
+curl -s URL | grep -oP "(?<=<span style=\"font-weight: bold;\">).+?(?=<\/span>)"
