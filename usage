@@ -64,5 +64,65 @@ ls -li /etc | sort -n
 #file sort by creation time on Windows
 dir /tc
 
-#
+#show all hotfix installed on Windows
+wmic qfe list full   #qfe : Quick Fix Engineering
+
+$mySession = New-Object -ComObject Microsoft.Update.Session 
+$mySearcher = $mySession.CreateUpdateSearcher() 
+$mySearcher.Search("IsInstalled=1").Updates | ft -a Date,Title
+
+#show upgradable package list on Linux
+apt-show-versions -u
+yum list-security
+
+#show installed packages on Mac
+pkgutil --packages | grep com.apple.pkg.update*
+
+#query each domain name of names.txt to DNS server from Windows
+for /F %i in (names.txt) do @echo %i & nslookup -norecurse %i [DNSserver] | find "answer" & echo.
+
+#query each domain name of names.txt to DNS server from Linux
+for i in `cat names.txt`; do host -r $i [nameserver]; done
+
+#flush DNS cache on Windows
+ipconfig /flushdns
+
+#show DNS cache on Linux
+netstat -rCn
+
+#delete contents of a file on Windows
+type nul > afile.txt
+copy nul > afile.txt
+
+#search queried name file on Windows
+dir /b /s c:\ | findstr /i vmware
+
+#copy files (even with remote host) on Linux
+rsync -aH wantdir/ todir/                          #copy wantdir to todir on same machine.without "/" copy the entire directory.
+rsync -aH remotehost:/path/to/dir/ localdir/       #copy remote dir to local machine
+rsync -aH dir/ remotehost:/path/to/dir/            #copy local dir to remote machine
+rsync -aH dir/ someuser@remotehost:/path/to/dir/   #copy dir to remote host as someuser
+
+#copy files on Windows
+robocopy wantdir/ todir/ /s
+
+#calculate on Windows cmd.exe
+set /a 1+1     #integer only
+
+#calculate on Linux
+let RESULT=2+2; echo $RESULT
+echo $((2+2))
+expr 2 + 2
+
+#rename all files on Linux
+for f in *; do mv -- "$f" "${f// /_}"; done   # use "--" in case of "-" is in file names. ${variable/pattern/substitution} and / before pattern means "all"
+for f in *; do mv -- "$f" "${f/#-/_}"; done　 # replace "-" at the beginning of file name.
+find docroot -type f -name \*.htm | while read f; do mv -- "$f" "${f/%.htm/.html}"; done  # replace ".htm" at the end of filename.
+for f in *; do n="${f// /_}"; [ -f "$n" ] || mv -- "$f" "$n"; done  # if not the file, mv.
+
+#show path on Windows
+set path
+
+#show path on Linux
+env |grep PATH
 
