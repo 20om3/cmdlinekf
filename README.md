@@ -1,2 +1,2 @@
 # cmdlinekf
-Thnaks for http://blog.commandlinekungfu.com
+Thanks for http://blog.commandlinekungfu.com
