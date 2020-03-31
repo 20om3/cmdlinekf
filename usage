@@ -126,3 +126,46 @@ set path
 #show path on Linux
 env |grep PATH
 
+#enable and disable firewall on Windows
+netsh firewall set opmode disable
+netsh firewall set opmode enable
+
+#enable and disable firewall on Linux
+sudo iptables stop
+ufw disable  #ubuntu only
+sudo iptables -A INPUT -p tcp -dport 80 -j ACCEPT
+ufw enable  #ubuntu only 
+ufw allow 80/tcp  #ubuntu only
+
+#serial and pararel for-loop in Linux
+for h in $(< targets); do echo ===== $h;ssh $h df -h; done  #serial, slow
+for h in $(< targets); do (echo ===== $h; ssh $h df -h); done  #pararel, faster
+
+#delete all target data on Windows
+cipher /w:c:\folder
+
+#delete all target data on Linux
+shred -n 3 -z -u myfile   # 3times Zerooverwrites remove
+dd if=/dev/urandom of=/path/to/targetdir bs=4096
+
+#finding dangerous password setting in Linux
+awk -F: '($2 == "") {print $1}' /etc/shadow # see if null passwords
+cut -f3 -d: /etc/passwd | sort -n | uniq -c | awk '!/ 1 / {print $2}' # see if same passwords
+awk -F: '($3 == 0) {print $1}' /etc/passwd # see if root password are used by not-root user
+
+#lockout user on Linux
+passwd -l
+
+#handle file names with space in it on Linux
+sudo find -type f -print0 |sudo xargs -0 grep -l 'Home Folder'
+
+#show SMB sessions and how to delete it from remote on Windows
+net use
+net session
+net use \\ServerMachineNamefrom<net session> /del
+
+#show SMB sessions and disable SMB share on Linux
+mount -t cifs
+df -t cifs
+smbcontrol 32733 close-share hal       # close a single share instance, PID 32733
+smbcontrol smbd close-share hal        # nuke all clients mounting "hal"
